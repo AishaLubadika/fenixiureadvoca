@@ -1,0 +1,87 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 8/jan/2018, 9:22:45
+    Author     : PENA
+*/
+
+
+.body{
+    font-size: 100% !important; 
+}
+
+@media screen and(max-device-width: 100%){
+    .container-central{
+        text-align: center;
+        border: solid #ccc 1em;
+    }
+}
+
+@media screen and(max-width: 600px){
+    .botton-div{
+        max-width: 90%;
+    }
+}
+
+.container-central{
+    float: right;
+    width: 60%;
+    margin-top: -32%;
+    margin-right: 6%;
+    border-right: solid #f3f3f3 0.1em;
+    border-left: solid #f3f3f3 0.1em;
+}
+
+.left-container{
+    width: 40%;
+    float: left; 
+}
+.container-principal{
+    background-color: #cccccc;
+}
+
+.botton-div {
+    background-color: #f3f3f3;
+    padding: 50px;
+    margin: 3px;
+    display: inline-block;
+    max-width: 70%;
+    border-radius: 120%;
+}
+
+
+.button-text{
+    color: #000099;
+    font: sans-serif;
+    font-family: serif;
+}
+
+.left-button{
+    padding: 2px;
+    margin: 3px;
+    display: block;
+    margin-left: 10%;
+}
+
+.container-form{
+    margin-left: 9%;
+}
+footer{
+    border-top: 5px solid;
+    padding: 5px 8px;
+    margin-top: 50px;
+    margin-bottom: 10px;   
+    text-align: center;
+}
+
+header{
+    padding: 5px;
+    margin-bottom: 30px;
+    height: 30px;
+    background-color: #000033;
+
+    box-shadow: 0px 5px 5px #ccc;
+}

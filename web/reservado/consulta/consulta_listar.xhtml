@@ -1,0 +1,182 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
+    <h:head>
+        <title>Consultas</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="./../../WEB-INF/templates/dashboard_1.xhtml">
+            <ui:define name="content">
+                <p:growl autoUpdate="true" showDetail="true"/>
+                <f:view>
+                    <b:panel title="Lista - de consultas feitas" collapsible="false" look="primary">
+                        <h:form>
+                            <p:dataTable  value="#{consultaMBean.consultas}" var="consulta" rows="10" paginator="true" cellSeparator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" paginatorPosition="bottom" scrollable="true">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <p:outputLabel value="Advogado"/>
+                                    </f:facet>
+                                    <h:outputText  style="width: 150px;" value="#{consulta.advogado}"/>
+                                </p:column>  
+                                <p:column>
+                                    <f:facet name="header">
+                                        <p:outputLabel value="Cliente"/>
+                                    </f:facet>
+                                    <h:outputText  style="width: 150px;" value="#{consulta.cliente}"/>
+                                </p:column> 
+                                <p:column>
+                                    <f:facet name="header">
+                                        <p:outputLabel value="Valor a pagar"/>
+                                    </f:facet>
+                                    <h:outputText  style="width: 150px;" value="#{consulta.valorPagar}"/>
+                                </p:column> 
+
+                                <p:column style="width: 150px; text-align: center" width="160">
+                                    <f:facet name="header">
+                                        <p:outputLabel value="Operações"/>
+                                    </f:facet>
+                                    <p:commandButton  action="#{consultaMBean.delete(evt)}" icon="ui-icon-trash ">
+                                        <f:setPropertyActionListener target="#{consultaMBean.consulta}" value="#{consulta}"/>
+                                    </p:commandButton>
+                                    <p:commandButton icon="ui-icon-pencil" update=":editar" oncomplete="PF('dialogoAlterar').show();" >
+                                        <f:setPropertyActionListener target="#{consultaMBean.consulta}" value="#{consulta}"/>
+                                    </p:commandButton>
+                                    <p:commandButton icon="ui-icon-zoomin"  update=":ver" oncomplete="PF('dlgVer').show();" >
+                                        <f:setPropertyActionListener target="#{consultaMBean.consulta}" value="#{consulta}"/>
+                                    </p:commandButton>
+                                </p:column>
+                                <f:facet name="footer">  
+                                    Total de consultas #{consultaMBean.consultas.size()}.  
+                                </f:facet> 
+                            </p:dataTable>   
+                        </h:form>
+                    </b:panel>
+                    <h:form id="operacoes">
+                        <p:commandButton value="+ Marcar consulta" type="button" onclick="PF('dlgNovo').show();" />
+
+                        <p:commandButton value="Fechar" action="/index" ajax="false" immediate="true" />                   
+                    </h:form>
+
+                    <p:dialog id="guardar" header="Nova consulta" widgetVar="dlgNovo" showEffect="explode" hideEffect="clip" height="500" width="600">
+                        <h:form  id="frmNovo"  enctype="multipart/form-data">
+                            <p:growl id="messages" showDetail="true"/>
+                            <h:messages showSummary="true" showDetail="true"/>
+                            <b:panel look="primary" collapsible="false" title="Marcar consulta" style="margin-bottom: 20px">
+                                <h:inputHidden value="#{consultaMBean.consulta.idConsulta}"/>
+                                <h:panelGrid columns="1" >
+
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel value="Advogado:" />
+                                            <p:selectOneMenu style="width:300px" id="advogados" filter="true" filterMatchMode="startsWith" label="Advogado:" value="#{consultaMBean.consulta.advogado}" required="true" converter="advogadoConverter">
+                                                <f:selectItem itemLabel="-Seleccione o advogado-" value="#{null}" noSelectionOption="true"/>
+                                                <f:selectItems value="#{consultaMBean.advogados}" var="advogado" itemValue="#{advogado}" itemLabel="#{advogado.nomeAdvogado}"/>
+                                            </p:selectOneMenu>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel value="Cliente:" />
+                                            <p:selectOneMenu style="width:300px" id="clientes" filter="true" filterMatchMode="startsWith" label="cliente:" value="#{consultaMBean.consulta.cliente}" required="true" converter="clienteConverter">
+                                                <f:selectItem itemLabel="-Seleccione o cliente-" value="#{null}" noSelectionOption="true"/>
+                                                <f:selectItems value="#{consultaMBean.clientes}" var="cliente" itemValue="#{cliente}" itemLabel="#{cliente.nomeCliente} #{cliente.apelidoCliente}"/>
+                                            </p:selectOneMenu>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel value="valor a pagar:"/>
+                                            <p:inputText id="valor" required="true" requiredMessage="O pagamento é obrigatório!" value="#{consultaMBean.consulta.valorPagar}" size="10"/>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel value="Resumo:"/>
+                                            <p:inputTextarea id="resumo" value="#{consultaMBean.consulta.resumoConsulta}" />
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                </h:panelGrid>
+                            </b:panel>
+                            <h:panelGrid columns="2">
+                                <p:commandButton value="Guardar" actionListener="#{consultaMBean.save(evt)}" update="growl" resetValues="true" ajax="false"/>
+                                <p:commandButton  style=" margin-left: 18%" value="x Fechar" action="/index" ajax="false" immediate="true" />
+                            </h:panelGrid>
+                        </h:form>
+                    </p:dialog>
+
+
+                    <p:dialog header="Alterar numero: #{consultaMBean.consulta.idConsulta}" id="editar" widgetVar="dialogoAlterar" showEffect="explode" hideEffect="bounce" height="500" width="600" modal="true"  resizable="false">
+                        <h:form id="formEditar" enctype="multipart/form-data">
+                            <p:growl id="messages" showDetail="true"/>
+                            <h:messages showSummary="true" showDetail="true"/>
+                            <b:panel look="primary" collapsible="false" title="Editar consulta" style="margin-bottom: 20px">
+                                <h:inputHidden value="#{consultaMBean.consulta.idConsulta}"/>
+                                <h:panelGrid columns="1" >
+                                    
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel value="Advogado:" />
+                                            <p:selectOneMenu style="width:300px" id="advogados" filter="true" filterMatchMode="startsWith" label="Advogado:" value="#{consultaMBean.consulta.advogado}" required="true" converter="advogadoConverter">
+                                                <f:selectItem itemLabel="-Seleccione o advogado-" value="#{null}" noSelectionOption="true"/>
+                                                <f:selectItems value="#{consultaMBean.advogados}" var="advogado" itemValue="#{advogado}" itemLabel="#{advogado.nomeAdvogado}"/>
+                                            </p:selectOneMenu>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel value="Cliente:" />
+                                            <p:selectOneMenu style="width:300px" id="clientes" filter="true" filterMatchMode="startsWith" label="cliente:" value="#{consultaMBean.consulta.cliente}" required="true" converter="clienteConverter">
+                                                <f:selectItem itemLabel="-Seleccione o cliente-" value="#{null}" noSelectionOption="true"/>
+                                                <f:selectItems value="#{consultaMBean.clientes}" var="cliente" itemValue="#{cliente}" itemLabel="#{cliente.nomeCliente} #{cliente.apelidoCliente}"/>
+                                            </p:selectOneMenu>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel value="valor a pagar:"/>
+                                            <p:inputText id="valor" required="true" requiredMessage="O pagamento é obrigatório!" value="#{consultaMBean.consulta.valorPagar}" size="10"/>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel value="Resumo:"/>
+                                            <p:inputTextarea id="resumo" value="#{consultaMBean.consulta.resumoConsulta}" />
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                </h:panelGrid>
+                            </b:panel>
+                            <h:panelGrid columns="2">
+                                <p:commandButton value="Guardar alterações" actionListener="#{consultaMBean.edit(evt)}" update="growl" resetValues="true" ajax="false"/>
+                                <p:commandButton  style=" margin-left: 18%" value="x Fechar" action="/index" ajax="false" immediate="true" />
+                            </h:panelGrid>
+                        </h:form>
+                    </p:dialog>
+                    <p:dialog header="Detalhes" id="ver" widgetVar="dlgVer" showEffect="explode" hideEffect="clip"  height="300" width="400">
+                        <h:panelGrid columns="2">
+
+                            <p:outputLabel value="Advogado:  "/>
+                            <p:outputLabel id="advogado" value="#{consultaMBean.consulta.advogado.nomeAdvogado}"/>
+                            <p:outputLabel value="Cliente:  "/>
+                            <p:outputLabel id="cliente" value="#{consultaMBean.consulta.cliente.nomeCliente}"/>
+                            <p:outputLabel value="valor a pagar:  "/>
+                            <p:outputLabel id="valor" value="#{consultaMBean.consulta.valorPagar}"/>
+
+                            <p:outputLabel value="Resumo:  "/>
+                            <p:outputLabel id="resumo" value="#{consultaMBean.consulta.resumoConsulta}"/>
+                        </h:panelGrid>
+                    </p:dialog>
+                </f:view>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

@@ -1,0 +1,320 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
+    <h:head>
+        <title></title>
+    </h:head>
+    <h:body>
+        <ui:composition template="./../../WEB-INF/templates/dashboard_1.xhtml">
+            <ui:define name="content">
+                <p:growl autoUpdate="true" showDetail="true"/>
+                <f:view>
+                    <b:panel title="Lista - requerido" collapsible="false" look="primary">
+                        <h:form>
+                            <p:dataTable  value="#{requeridoMBean.requeridos}" var="requerido" rows="10" paginator="true" cellSeparator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" paginatorPosition="bottom" scrollable="true">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <p:outputLabel value="Nome/Razão Social"/>
+                                    </f:facet>
+                                    <h:outputText  style="width: 150px;" value="#{requerido.nomeRequerido}"/>
+                                </p:column> 
+                                <p:column>
+                                    <f:facet name="header">
+                                        <p:outputLabel value="Apelido/Fantasia"/>
+                                    </f:facet>
+                                    <h:outputText style="width: 150px;" value="#{requerido.apelidoRequerido}"/>
+                                </p:column> 
+                                <p:column>
+                                    <f:facet name="header">
+                                        <p:outputLabel value="Numero de telefone"/>
+                                    </f:facet>
+                                    <h:outputText style="width: 150px;" value="#{requerido.telefoneRequerido}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <p:outputLabel value="E-mail"/>
+                                    </f:facet>
+                                    <h:outputText style="width: 150px;" value="#{requerido.emailRequerido}"/>
+                                </p:column> 
+                                <p:column style="width: 150px; text-align: center" width="160">
+                                    <f:facet name="header">
+                                        <p:outputLabel value="Operações"/>
+                                    </f:facet>
+                                    <p:commandButton  action="#{requeridoMBean.delete(evt)}" icon="ui-icon-trash ">
+                                        <f:setPropertyActionListener target="#{requeridoMBean.requerido}" value="#{requerido}"/>
+                                    </p:commandButton>
+                                    <p:commandButton icon="ui-icon-pencil" update=":editar" oncomplete="PF('dialogoAlterar').show();" >
+                                        <f:setPropertyActionListener target="#{requeridoMBean.requerido}" value="#{requerido}"/>
+                                    </p:commandButton>
+                                    <p:commandButton icon="ui-icon-zoomin"  update=":ver" oncomplete="PF('dlgVer').show();" >
+                                        <f:setPropertyActionListener target="#{requeridoMBean.requerido}" value="#{requerido}"/>
+                                    </p:commandButton>
+                                </p:column>
+                                <f:facet name="footer">  
+                                    N.º Requeridos #{requeridoMBean.requeridos.size()}
+                                </f:facet> 
+                            </p:dataTable>     
+                        </h:form>
+
+                    </b:panel>
+
+                    <h:form id="operacoes">
+                        <p:commandButton value="+ Novo requerido" type="button" onclick="PF('dlgNovo').show();" />
+
+                        <p:commandButton value="Fechar" action="/index" ajax="false" immediate="true" />                   
+                    </h:form>
+
+                    <!-- inicio Dialogo novo-->
+                    <p:dialog id="guardar" header="Novo cadastro" widgetVar="dlgNovo" showEffect="explode" hideEffect="clip" height="500" width="900">
+                        <h:form  id="frmNovo"  enctype="multipart/form-data">
+                            <p:growl id="messages" showDetail="true"/>
+                            <h:messages showSummary="true" showDetail="true"/>
+
+
+                            <b:panel look="primary" collapsible="false" title="Dados Pessoais" style="margin-bottom: 20px">
+                                <h:inputHidden value="#{requeridoMBean.requerido.idRequerido}"/>
+                                <h:panelGrid columns="2" >
+
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel value="Nome/Razão social:"/>
+                                            <p:inputText id="nome" value="#{requeridoMBean.requerido.nomeRequerido}" size="30"/>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel style="margin-left: 18%" value="Apelido/Fantasia:"/>
+                                            <p:inputText id="apelido" style="margin-left: 18%" value="#{requeridoMBean.requerido.apelidoRequerido}" size="30"/>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel value="Numero do BI:"/>
+                                            <p:inputText id="nbi" value="#{requeridoMBean.requerido.numeroBiRequerido}" size="20"/>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                    <p> </p>
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel style="margin-left: 22%" value="Observações:"/>
+                                            <p:inputTextarea id="obs" style="margin-left: 22%" value="#{requeridoMBean.requerido.observacao}" />
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                </h:panelGrid>
+                            </b:panel>
+                            <b:panel look="primary" collapsible="false" title="Endereço" style="margin-bottom: 20px">
+                                <h:panelGrid columns="3">
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel style="margin-left: 18%" value="Rua:"/>
+                                            <p:inputText style="margin-left: 18%" id="rua" value="#{requeridoMBean.requerido.ruaRequerido}" size="20"/>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel style="margin-left: 18%" value="Bairro:"/>
+                                            <p:inputText style="margin-left: 18%" id="bairro" value="#{requeridoMBean.requerido.bairroRequerido}" size="20"/>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+
+
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel value="Município:" style="margin-left: 18%" />
+                                            <p:selectOneMenu style="width:200px; margin-left: 18%" id="municipios" filter="true" filterMatchMode="startsWith" label="Município:" value="#{requeridoMBean.requerido.municipio}" required="true" converter="municipioConverter">
+                                                <f:selectItem itemLabel="-Seleccione o município-" value="#{null}" noSelectionOption="true"/>
+                                                <f:selectItems value="#{requeridoMBean.municipios}" var="municipio" itemValue="#{municipio}" itemLabel="#{municipio.nomeMunicipio}"/>
+                                            </p:selectOneMenu>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                </h:panelGrid>
+                            </b:panel>
+                            <b:panel look="primary" collapsible="false" title="Contactos">
+                                <h:panelGrid columns="2">
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel  value="Telefone:"/>
+                                            <p:inputText id="telefone" value="#{requeridoMBean.requerido.telefoneRequerido}" size="20"/>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel style="margin-left: 18%" value="E-mail:"/>
+                                            <p:inputText id="email" style="margin-left: 18%" value="#{requeridoMBean.requerido.emailRequerido}" size="20"/>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                </h:panelGrid>
+                            </b:panel>
+                            <h:panelGrid columns="2">
+                                <p:commandButton value="Guardar" actionListener="#{requeridoMBean.save(evt)}" update="growl" resetValues="true" ajax="false"/>
+                                <p:commandButton style="margin-left: 18%" value="x Fechar" action="/index" ajax="false" immediate="true" />
+
+                            </h:panelGrid>
+                        </h:form>
+
+                    </p:dialog>
+
+
+
+
+
+                    <p:dialog header="Alterar dados" id="editar" widgetVar="dialogoAlterar" showEffect="explode" hideEffect="clip" height="500" width="1000" modal="true"  resizable="false">
+
+                        <h:form id="formEditar" enctype="multipart/form-data">
+                            <p:growl id="messages" showDetail="true"/>
+                            <h:messages showSummary="true" showDetail="true"/>
+
+                            <b:panel look="primary" collapsible="false" title="Dados Pessoais" style="margin-bottom: 20px">
+                                <h:inputHidden value="#{requeridoMBean.requerido.idRequerido}"/>
+                                <h:panelGrid columns="2" >
+
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel value="Nome/Razão social:"/>
+                                            <p:inputText id="nome" value="#{requeridoMBean.requerido.nomeRequerido}" size="30"/>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel  style="margin-left: 18%" value="Apelido/Fantasia:"/>
+                                            <p:inputText id="apelido" style="margin-left: 18%" value="#{requeridoMBean.requerido.apelidoRequerido}" size="30"/>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel value="Numero do BI:"/>
+                                            <p:inputText id="nbi" value="#{requeridoMBean.requerido.numeroBiRequerido}" size="20"/>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel style="margin-left: 18%" value="Observações:"/>
+                                            <p:inputTextarea id="obs" style="margin-left: 18%" value="#{requeridoMBean.requerido.observacao}" rows="5" />
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                </h:panelGrid>
+                            </b:panel>
+                            <b:panel look="primary" collapsible="false" title="Endereço" style="margin-bottom: 20px">
+                                <h:panelGrid columns="3">
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel style="margin-left: 18%" value="Rua:"/>
+                                            <p:inputText style="margin-left: 18%" id="rua" value="#{requeridoMBean.requerido.ruaRequerido}" size="20"/>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel style="margin-left: 18%" value="Bairro:"/>
+                                            <p:inputText style="margin-left: 18%" id="bairro" value="#{requeridoMBean.requerido.bairroRequerido}" size="20"/>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+
+
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel value="Município:" style="margin-left: 18%"/>
+                                            <p:selectOneMenu style="width:200px; margin-left: 18%" id="municipios" filter="true" filterMatchMode="startsWith" label="Município:" value="#{requeridoMBean.requerido.municipio}" required="true" converter="municipioConverter">
+                                                <f:selectItem itemLabel="-Seleccione o município-" value="#{null}" noSelectionOption="true"/>
+                                                <f:selectItems value="#{requeridoMBean.municipios}" var="municipio" itemValue="#{municipio}" itemLabel="#{municipio.nomeMunicipio}"/>
+                                            </p:selectOneMenu>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                </h:panelGrid>
+                            </b:panel>
+                            <b:panel look="primary" collapsible="false" title="Contactos">
+                                <h:panelGrid columns="2">
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel value="Telefone:"/>
+                                            <p:inputText id="telefone" value="#{requeridoMBean.requerido.telefoneRequerido}" size="20"/>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel value="E-mail:" style="margin-left: 18%"/>
+                                            <p:inputText id="email"  style="margin-left: 18%" value="#{requeridoMBean.requerido.emailRequerido}" size="20"/>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                </h:panelGrid>
+                            </b:panel>
+                            <h:panelGrid columns="2">
+                                <p:commandButton value="Guardar" actionListener="#{requeridoMBean.edit(evt)}" update="growl" resetValues="true" ajax="false" />
+                                <p:commandButton  style="margin-left: 18%" value="x Fechar" action="/index" ajax="false" immediate="true" />
+                            </h:panelGrid>
+
+
+
+
+                        </h:form>
+                    </p:dialog>
+
+                    <p:dialog  header="Detalhes do requerido" id="ver" widgetVar="dlgVer" showEffect="explode" hideEffect="clip"  height="300" width="950">
+                        <h:form id="formVer">
+
+                            <p:accordionPanel>
+                                <p:tab title="Dados Pessoais">
+                                    <h:panelGrid columns="2">
+                                        <h:panelGroup>
+                                            <h:panelGrid columns="2">
+                                                <p:outputLabel value="Nome ou razão social   :  "/>
+                                                <p:outputLabel id="nome" value="#{requeridoMBean.requerido.nomeRequerido}"/>
+                                                <p:outputLabel value="Apelido ou fantasia:   "/>
+                                                <p:outputLabel id="apelido" value="#{requeridoMBean.requerido.apelidoRequerido}"/>
+                                                <p:outputLabel value="Numero de BI: "/>
+                                                <p:outputLabel id="nbi" value="#{requeridoMBean.requerido.numeroBiRequerido}"/>
+                                                <p:outputLabel value="Observacões:   "/>
+                                                <p:outputLabel id="obs" value="#{requeridoMBean.requerido.observacao}"/>
+
+
+                                            </h:panelGrid>
+                                        </h:panelGroup>
+                                    </h:panelGrid>
+                                </p:tab>
+                           
+
+                            <p:tab title="Endereço">
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="Rua: "/>
+                                    <p:outputLabel id="rua" value="#{requeridoMBean.requerido.ruaRequerido}"/>
+                                    <p:outputLabel value="Bairro: "/>
+                                    <p:outputLabel id="bairro" value="#{requeridoMBean.requerido.bairroRequerido}"/>
+                                    <p:outputLabel value="Municipio: "/>
+                                    <p:outputLabel id="municipios" value="#{requeridoMBean.requerido.municipio.nomeMunicipio}"/> 
+                                </h:panelGrid>
+                            </p:tab>
+
+                            <p:tab title="Contactos">
+                                <h:panelGrid columns="2">
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="2">
+                                        <p:outputLabel value="Telefone:  "/>
+                                        <p:outputLabel id="telefone" value="#{requeridoMBean.requerido.telefoneRequerido}"/>
+                                        <p:outputLabel value="Email: "/>
+                                        <p:outputLabel id="email" value="#{requeridoMBean.requerido.emailRequerido}"/>
+                                        </h:panelGrid>
+                                    
+                                </h:panelGroup>
+                                </h:panelGrid>
+                                <h:panelGroup>
+                                    
+                                </h:panelGroup>
+
+                            </p:tab>
+                         </p:accordionPanel>
+
+                        </h:form>
+
+                    </p:dialog>
+
+                </f:view>
+            </ui:define>
+        </ui:composition>
+
+    </h:body>
+</html>
+

@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
+    <h:head>
+        <title></title>
+    </h:head>
+    <h:body>
+        <ui:composition template="./../../WEB-INF/templates/dashboard_1.xhtml">
+            <ui:define name="content">
+                <p:growl autoUpdate="true" showDetail="true"/>
+                <f:view>
+                    <b:panel title="Depesas" collapsible="false" look="primary">
+                        <h:form>
+                            <p:dataTable  value="#{despesaMBean.despesas}" var="despesa" rows="10" paginator="true" cellSeparator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" paginatorPosition="bottom" scrollable="true"> 
+                                <p:column>
+                                    <f:facet name="header">
+                                        <p:outputLabel value="Descricão"/>
+                                        <h:outputText  style="width: 150px;" value="#{despesa.descicao}"/>
+
+                                    </f:facet>
+
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <p:outputLabel value=" Valor a pagar"/>
+                                        <h:outputText  style="width: 150px;" value="#{despesa.valorDespesa}"/>
+
+                                    </f:facet>
+
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <p:outputLabel value="Processo"/>
+                                        <h:outputText  style="width: 150px;" value="#{despesa.processo.numeroProcesso}"/>
+
+                                    </f:facet>
+
+                                </p:column>
+                                <p:column style="width: 150px; text-align: center" width="160">
+                                    <f:facet name="header">
+                                        <p:outputLabel value="Operações"/>
+                                    </f:facet>
+                                    <p:commandButton  action="#{despesaMBean.delete(evt)}" icon="ui-icon-trash ">
+                                        <f:setPropertyActionListener target="#{despesaMBean.despesa}" value="#{despesa}"/>
+                                    </p:commandButton>
+                                    <p:commandButton icon="ui-icon-pencil" update=":editar" oncomplete="PF('dialogoAlterar').show();" >
+                                        <f:setPropertyActionListener target="#{despesaMBean.despesa}" value="#{despesa}"/>
+                                    </p:commandButton>
+
+                                </p:column>
+
+                                <f:facet name="footer">  
+                                    Total da lista #{despesaMBean.despesas.size()} 
+                                </f:facet>
+                            </p:dataTable>
+                        </h:form>
+                    </b:panel> 
+                    <h:form id="operacoes">
+                        <p:commandButton value="+ Nova " type="button" onclick="PF('dlgNovo').show();" />
+
+                        <p:commandButton value="Fechar" action="/index" ajax="false" immediate="true" />                   
+                    </h:form>
+                    <p:dialog id="guardar" header="Nova" widgetVar="dlgNovo" showEffect="explode" hideEffect="clip" height="500" width="600">
+                        <h:form  id="frmNovo"  enctype="multipart/form-data">
+                            <p:growl id="messages" showDetail="true"/>
+                            <h:messages showSummary="true" showDetail="true"/>
+                            <b:panel look="primary" collapsible="false" title="Despesa" style="margin-bottom: 20px">
+                                <h:panelGrid columns="2" >
+                                    <h:inputHidden value="#{despesaMBean.despesa.idDespesaProcesso}"/>
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel value="Processo:" />
+                                            <p:selectOneMenu style="width:200px" id="processos" filter="true" filterMatchMode="startsWith" label="Processo:" value="#{despesaMBean.despesa.processo}" required="true" converter="processoConverter">
+                                                <f:selectItem itemLabel="-Seleccione o processo-" value="#{null}" noSelectionOption="true"/>
+                                                <f:selectItems value="#{despesaMBean.processos}" var="processo" itemValue="#{processo}" itemLabel="#{processo.numeroProcesso}"/>
+                                            </p:selectOneMenu>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                     <h:panelGroup>
+                                    <h:panelGrid columns="1">
+                                        <p:outputLabel value="Descrição:"/>
+                                        <p:inputText id="descricao" value="#{despesaMBean.despesa.descicao}" size="45"/>
+                                    </h:panelGrid>
+                                </h:panelGroup>
+                                     <h:panelGroup>
+                                    <h:panelGrid columns="1">
+                                        <p:outputLabel value="Valor a pagar:"/>
+                                        <p:inputText id="valorD" value="#{despesaMBean.despesa.valorDespesa}" size="10"/>
+                                    </h:panelGrid>
+                                </h:panelGroup>
+                                </h:panelGrid>
+                            </b:panel>
+                                <h:panelGrid columns="2">
+                                    <p:commandButton value="Guardar" actionListener="#{despesaMBean.save(evt)}" update="growl" resetValues="true" ajax="false"/>
+                                <p:commandButton value="x Fechar" action="/index" ajax="false" immediate="true" />
+                            </h:panelGrid>
+                        </h:form>
+                    </p:dialog>
+                    
+                    
+                    <p:dialog header="Alterar" id="editar" widgetVar="dialogoAlterar" showEffect="explode" hideEffect="bounce" height="500" width="900" modal="true"  resizable="false">
+                        <h:form id="formEditar" enctype="multipart/form-data">
+                            <p:growl id="messages" showDetail="true"/>
+                            <h:messages showSummary="true" showDetail="true"/>
+                             <b:panel look="primary" collapsible="false" title="Despesa" style="margin-bottom: 20px">
+                                <h:panelGrid columns="2" >
+                                    <h:inputHidden value="#{despesaMBean.despesa.idDespesaProcesso}"/>
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1">
+                                            <p:outputLabel value="Processo:" />
+                                            <p:selectOneMenu style="width:200px" id="processos" filter="true" filterMatchMode="startsWith" label="Processo:" value="#{despesaMBean.despesa.processo}" required="true" converter="processoConverter">
+                                                <f:selectItem itemLabel="-Seleccione o processo-" value="#{null}" noSelectionOption="true"/>
+                                                <f:selectItems value="#{despesaMBean.processos}" var="processo" itemValue="#{processo}" itemLabel="#{processo.numeroProcesso}"/>
+                                            </p:selectOneMenu>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                     <h:panelGroup>
+                                    <h:panelGrid columns="1">
+                                        <p:outputLabel value="Descrição:"/>
+                                        <p:inputText id="descricao" value="#{despesaMBean.despesa.descicao}" size="45"/>
+                                    </h:panelGrid>
+                                </h:panelGroup>
+                                     <h:panelGroup>
+                                    <h:panelGrid columns="1">
+                                        <p:outputLabel value="Valor a pagar:"/>
+                                        <p:inputText id="valorD" value="#{despesaMBean.despesa.valorDespesa}" size="10"/>
+                                    </h:panelGrid>
+                                </h:panelGroup>
+                                </h:panelGrid>
+                            </b:panel>
+                                <h:panelGrid columns="2">
+                                    <p:commandButton value="Guardar" actionListener="#{despesaMBean.edit(evt)}" update="growl" resetValues="true" ajax="false"/>
+                                <p:commandButton value="x Fechar" action="/index" ajax="false" immediate="true" />
+                            </h:panelGrid>
+                        </h:form>
+                    </p:dialog>
+
+                </f:view>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

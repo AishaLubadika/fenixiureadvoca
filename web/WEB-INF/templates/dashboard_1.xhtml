@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>Fenix advocacia</title>
+                <h:outputStylesheet library="css" name="dashboard_1.css"/>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+
+            <header>
+            </header>
+            <h:form >
+                <p:menubar style="margin-top: -25px; margin-bottom: 20px;">
+
+                    <p:menuitem value="HOME" icon="ui-icon-home "  outcome="/index.xhtml"/>
+
+
+                    <p:submenu label="ADVOGADOS" >
+                        <p:submenu label="Procurar" icon="ui-icon-search">
+                            <p:menuitem value="Listagem" url="/reservado/advogado/advogado_listar.jsf"/>
+                            <p:menuitem value="Por nome" url="#"/>
+                        </p:submenu>  
+                    </p:submenu>
+                    <p:submenu label="CLIENTES">
+                        <p:submenu label="Procurar" icon="ui-icon-search">
+                            <p:menuitem value="Ver lista"  url="/reservado/cliente/cliente_listar.jsf"/>
+                            <p:menuitem value="Procurar por nome e sobrenome" url="/reservado/cliente/cliente_by_nome_sobrenome.jsf"/> 
+                        </p:submenu>
+                    </p:submenu>
+                    <p:submenu label="PROCESSOS">
+                        <p:submenu label="Procurar" icon="ui-icon-search">
+                            <p:menuitem value="Novo" url="/reservado/processo/processo_novo.jsf"/>
+                            <p:menuitem value="Listagem" url="/reservado/processo/processo_listar.jsf"/>
+                            <p:menuitem value="Procurar por numero processo" url="#"/> 
+                        </p:submenu>
+
+                    </p:submenu>
+                    
+                    <p:submenu label="REQUERIDOS">
+                        <p:submenu label="Operações" icon="ui-icon-search">
+                             <p:menuitem value="Novo" url="/reservado/requerido/requerido_novo.jsf"/> 
+                            <p:menuitem value="listagem" url="/reservado/requerido/requerido_listar.jsf"/> 
+
+                        </p:submenu>
+                    </p:submenu>
+                    
+                    <p:submenu label="OUTROS">
+                        <p:submenu label="Procurar" icon="ui-icon-search">
+                            <p:menuitem value="Listagem estado processo" url="/reservado/estado_processo/estado_processo_listar.jsf" />
+                            <p:menuitem value="Listagem tipo decisão" url="/reservado/tipo_decisao/tipo_decisao_listar.jsf" />
+                            <p:menuitem value="Listagem tipo processo" url="/reservado/tipo_processo/tipo_processo_listar.jsf" />
+                        </p:submenu>
+
+                    </p:submenu>
+                    <p:submenu label="AJUDA">
+                        <p:menuitem value="sobre o sistema" />
+
+                    </p:submenu>
+                    <p:submenu style="margin-left: 20%;" label="IDIOMAS"  >
+
+                        <p:menuitem  value="Português"  url="#" />
+                        <p:menuitem value="Inglês"  url="#" />
+                        <p:menuitem value="Francês"  url="#" />
+                        <p:menuitem value="Espanhol"  url="#" />
+
+                    </p:submenu>
+
+                    <p:menuitem style="margin-left: 15%;" value="LOGOUT"  url="#" />
+                </p:menubar>
+            </h:form>
+
+
+            <div class="container-principal">
+                <ui:insert name="content">
+                    <b:row>
+                        <div class="left-container">
+                            <b:image library="imagens" style="margin-left: 19%;" name="justica2.png" width="150" height="150"/>
+                            <div id="left-panel">
+                                <h:form class="left-container-form">
+                                    <div class="left-button">
+                                        <h4 style="margin-left: 4px;">ADMINISTRAÇÃO E GESTÃO</h4>
+                                    </div>
+
+                                    <b:buttonGroup display="iniline-block"  col-sm="1" col-md="4" colMd="3" offset-md="1" pull="left"
+                                                   span="4">
+                                        <div class="left-button">
+                                            <b:commandButton  look="primary" style="width: 180%;"  action="#" ajax="false">
+                                                <h4>Honórios</h4>
+                                            </b:commandButton>
+                                        </div>
+
+                                        <div class="left-button">
+                                            <b:commandButton look="primary" style="width: 180%;"  action="#" ajax="false">
+                                                <h4>Pessoas</h4>
+                                            </b:commandButton>
+                                        </div>
+
+                                        <div class="left-button">
+                                            <b:commandButton look="primary" style="width: 180%;"  action="#" ajax="false">
+                                                <h4>Audiências</h4>
+                                            </b:commandButton>
+                                        </div>
+
+                                        <div class="left-button">
+                                            <b:commandButton  style="width: 180%;" look="primary"  action="/reservado/usuario/usuario_listar.jsf" ajax="false">
+                                                <h4>Usuários</h4>
+                                            </b:commandButton>
+                                        </div>
+                                    </b:buttonGroup>
+                                </h:form>
+                            </div>
+
+                        </div>
+                    </b:row>
+
+                    <b:row>
+                        <div class="container-central">
+                            <div class="container-panel">
+                                <h:form class="container-form">
+
+                                    <div class="header-text">
+
+                                    </div>
+                                         
+                                    <div class="botton-div button-text">
+                                        <b:commandButton class="button" look="normal" action="/reservado/advogado/advogado_novo.jsf">
+                                            <b:image width="70" height="60" class="img-responsive" library="imagens" name="advogados.png" alt="Sem imagem"/>
+                                            <p>Advogados</p>
+                                        </b:commandButton>
+                                    </div>
+
+                                    <div class="botton-div button-text">
+                                        <b:commandButton class="button" look="normal" action="#">
+                                            <b:image width="70" height="60" class="img-responsive" library="imagens" name="consulta.png" alt="Sem imagem"/>
+                                            <p>Consulta</p>
+                                        </b:commandButton>
+                                    </div>
+
+                                    <div class="botton-div button-text">
+                                        <b:commandButton class="button" look="normal" action="/reservado/cliente/cliente_novo.jsf">
+                                            <b:image width="70" height="60" class="img-responsive" library="imagens" name="cliente.png" alt="Sem imagem"/>
+                                            <p>Cliente</p>
+                                        </b:commandButton>
+                                    </div>
+
+
+                                </h:form>
+                            </div>
+
+                            <div class="container-panel">
+                                <h:form class="container-form">
+                                    <div class="botton-div button-text">
+                                        <b:commandButton class="button" look="normal" action="/reservado/processo/processo_novo.jsf">
+                                            <b:image width="70" height="60" class="img-responsive" library="imagens" name="processo1.png" alt="Sem imagem"/>
+                                            <p>Processos</p>
+                                        </b:commandButton>
+                                    </div>
+
+                                    <div class="botton-div button-text">
+                                        <b:commandButton class="button" look="normal" action="#">
+                                            <b:image width="70" height="60" class="img-responsive" library="imagens" name="edificio.png" alt="Sem imagem"/>
+                                            <p>Escritorio</p>
+                                        </b:commandButton>
+                                    </div>
+
+                                    <div class="botton-div button-text">
+                                        <b:commandButton class="button" look="normal" action="#">
+                                            <b:image width="70" height="60" class="img-responsive" library="imagens" name="localizacao.png" alt="Sem imagem"/>
+                                            <p>Localidades</p>
+                                        </b:commandButton>
+                                    </div>
+
+
+                                </h:form>
+                            </div>
+                        </div>
+                    </b:row>
+                </ui:insert>
+            </div>
+
+            <footer>
+                Fénix Innovation &copy; 2019
+            </footer>
+
+
+        </h:body>
+
+    </f:view>
+</html>
+
